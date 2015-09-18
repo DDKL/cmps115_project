@@ -1,0 +1,71 @@
+<!-- When making these static pages try indenting eight times or inserting 16 spaces to the right. The indentations make the HTML more readable when debugging. -Luis, but it makes it more annoying to code -Andy-->
+<!--START HELP PAGE-->
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-KTX3DW"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KTX3DW');</script>
+<!-- End Google Tag Manager -->
+<title>Help</title>
+  <center><p>Click Logo to go to Homepage</p></center>
+<link rel="stylesheet" href="/css/blueimp-gallery.min.css">
+<!-- The Gallery as inline carousel, can be positioned anywhere on the page -->
+<div id="blueimp-gallery-carousel" class="blueimp-gallery blueimp-gallery-carousel">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
+
+
+<div id="links">
+  <a href="/gfx/tutorial1.jpg" title="Sign in Page"></a>
+  <a href="/gfx/tutorial3.jpg" title="Adding a URL"></a>
+  <a href="/gfx/tutorial4.jpg" title="Reddit Box Added"></a>
+  <a href="/gfx/tutorial5.jpg" title="Edit Box Button"></a>
+  <a href="/gfx/tutorial6.jpg" title="Subreddit and Resize"></a>
+  <a href="/gfx/tutorial7.jpg" title="Drag and Delete"></a>
+  <a href="/gfx/tutorial8.jpg" title="Edit User Page"></a>
+  <a href="/gfx/tutorial9.jpg" title="Inputting Background and enable search bar"></a>
+  <a href="/gfx/tutorial10.jpg" title="Background and search bar on home"></a>
+  <a href="/gfx/tutorial11.jpg" title="Sample Page"></a>
+</div>
+
+<script src="/js/blueimp-gallery.min.js"></script>
+
+<script>
+blueimp.Gallery(
+    document.getElementById('links').getElementsByTagName('a'),
+    {
+        container: '#blueimp-gallery-carousel',
+        carousel: true
+    }
+);
+</script>
+<center><h1>FAQs</h1></center>
+
+    <HR>
+        <p><b>What is the site about?</b></p>
+        <p>The site is meant to act as a good substitute as your homepage. This would be where you would have quick and easy access to any sites you occasionally visit as well as style it to your own personal liking.</p>
+        For more information, please visit <a href="/static_pages/about">About</a>.
+    <HR>
+        <p><b>I've noticed from the slideshow that there is an image in the background, how can I have my own?</b></p>
+        <p>After you have signed into your account, if you click on 'Edit Account', under 'Change Background Image' there should be an option to insert an image url. Along with that, there's a recommended image size based on how big your browser is at the moment. <br> You're free to remove your background later if unsatisfied.</p>
+    <HR>
+        <p><b>How do I get rid of websites I no longer want?</b></p>
+        <p>If you are logged in, there is a button next to 'Add URL' called 'Edit Boxes,' from there if you drag the boxes to the trash can it removes your box for you.</p>
+    <HR>
+        <p><b>Why is my subReddit not working?</b></p>
+        <p>The only way to access/change is through 'Edit Boxes' then there's a box where you can enter in your subReddit. It needs to be in the format of /r/somethingHere. e.g. /r/apple</p>
+    <HR>
+        <p><b>What happens if there was a major error on my account?</b></p>
+        <p>You should then send an e-mail to tabdec.handle@gmail.com and we'll try to resolve your problem as soon as possible</p>
+    <HR>
+
+<%= link_to "Back", :back %>
+<!--END HELP PAGE CODE-->

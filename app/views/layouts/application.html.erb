@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<!--This is the HTML that wraps the main content of every page (e.g. the header and footer)-->
+<html>
+    <head>
+      
+        <!-- START sidebar includes -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Save your favorite websites on one page.">
+        <meta name="author" content="Hai, Steven, Andy, Craig, Luis, Duke">
+        
+        <!-- Bootstrap Core CSS -->
+        <!--<link href="/css/bootstrap.min.css" rel="stylesheet">-->
+
+        <!-- Custom CSS -->
+        <link href="/css/simple-sidebar.css" rel="stylesheet">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <!-- END sidebar includes -->
+      
+        <link rel="stylesheet/less" href="/style.less">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" ></script>
+        <script src="/less.js"></script>
+        <script type="text/javascript"> var toggleMenu=0;</script>
+    </head>
+  
+    <body>
+      <!-- Google Tag Manager -->
+      <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-KTX3DW"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+      <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-KTX3DW');</script>
+      <!-- End Google Tag Manager -->
+      <!--New div required for the sidebar -->
+      <div id="wrapper">
+                  <!-- This is the popup for adding URLs -->
+          <div id="popup" style="z-index:1001; left:180; top:64">
+              <form class="addURLForm">
+                  <input type="text" class="addURLField" placeholder="Insert Website"/>
+              </form>
+          </div>
+        
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="/" class="logo"> <img src="/gfx/logo.png" alt="logo"> </a>
+                </li>
+                <% if user_signed_in? %>
+                
+                <li>
+                  
+                  
+
+                  <input type="button" id="open_popup" onclick="urlCheckCancel()" value="Add URL"/>
+                  <script>
+                      //checks each click. if the add url popup is showing and the user clicks anywhere else it will disappear.
+                      $(document).click(function(e){
+                          if($("#popup").css("display") == "block" && e.target.id != "open_popup"){
+                            if (e.target.id != "popup" && e.target.className.indexOf("addURLField") == -1){
+                                  $("#popup").css("display", "none");
+                              }
+                          }
+                      });
+
+                      //for button input onclick
+                      function urlCheckCancel(){
+                        var availableTags = [];
+                        $( ".addURLField" ).autocomplete({
+                          //source: availableTags,
+                          source: function(request, response) {
+                            var results = $.ui.autocomplete.filter(availableTags, request.term);
+                            response(results.slice(0,5));
+                          },
+                        });
+                        $(function () {
+                          $.ajax({
+                            type: "GET",
+                            url: '/urls/new.json',
+                            dataType: 'json',
+                            async: false,
+                            success: function(data){
+                               $.each(data, function(k) {
+                                 var urlLink = String(data[k].link);
+                                 availableTags.push(urlLink);
+                               });
+                             },
+                            error: function(data){
+                              console.log("it done messed up");
+                            }
+                          });                      
+                        });
+                          if($("#popup").css("display") == "block"){
+                              $("#popup").css("display", "none");
+                          }
+                          else{
+                              $("#popup").css("display", "block");
+                              $(".addURLField").select();
+                          }
+                      }
+
+                      //set the position of the popup under the add url button
+                      var getLeftAddURL = document.getElementById("open_popup").getBoundingClientRect().left + 180;
+                      var getTopAddURL = document.getElementById("open_popup").getBoundingClientRect().top - 10;
+                      document.getElementById("popup").style.left = getLeftAddURL + "px" ;
+                      document.getElementById("popup").style.top = getTopAddURL + "px";
+
+                      $(".addURLForm").submit(function(event){
+                        $("#popup").append("<div id='loading'><img src='/gfx/redditLoader.gif' alt='loading...'></div>");
+                          var getAddURLForm = $(".addURLField").val();
+                          $.ajax({
+                            type: "GET",
+                            url: '/urls/new',
+                            data: {"addURLLink" : getAddURLForm},
+                            async: false,
+                            success: function (data){
+                                console.log("ajax in add URL success");
+                            },
+                            error: function (data){
+                                console.log("ajax in add URL failed");
+                            }
+                          });
+                          $("#loading img").remove();
+                          $("#popup").remove();
+                          window.location.reload();  
+                      });
+                  </script>
+                </li>
+              
+                <li>
+                  <!--This is the edit box section -->
+                  <button id="editBoxButton" type="button">Edit Boxes</button>
+                </li>
+                
+                <li>
+                    <!--If user is logged in, it will display a log out button.
+                    link_to takes provided text and URL and generates hyperlink -->
+                    <%= form_tag("/users/edit", method: "get") do %>
+                    <%= submit_tag "Edit Account" %>
+                    <% end %>
+                </li>
+                <li>
+                  <%= form_tag("/users/sign_out", method: "delete") do %>
+                  <%= submit_tag "Log Out" %>
+                  <% end %>
+                </li>
+                <% end %>
+                <li><a href="/static_pages/help">Help</a></li>
+                <li><a href="/static_pages/about">About</a></li>
+                <li><a href="/static_pages/contact">Contact</a></li>
+                <li><a href="/static_pages/advertising">Advertising</a></li>
+              
+              <div class="social">
+	              <li><span class="twitter">
+		            <a href="http://twitter.com/share" class="twitter-share-button" data-url="https://www.tabdec.com/">Tweet</a>
+		            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';
+                                          if(!d.getElementById(id)){js=d.createElement(s);
+                                                                    js.id=id;js.src=p+'://platform.twitter.com/widgets.js';  
+                                                                    fjs.parentNode.insertBefore(js,fjs);}}
+                                          (document, 'script', 'twitter-wjs');</script>
+                  </span></li>
+	             <li> <span class="google">
+		            <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+		            <g:plusone size="medium" href="https://www.tabdec.com"></g:plusone>
+                 </span></li>
+	              <li><span class="Facebook">
+		             <iframe src="https://www.facebook.com/plugins/like.php?href=https://www.tabdec.com&amp;show_faces=false&amp;layout=button_count" scrolling="no" frameborder="0" style="height: 21px; width: 100px" allowTransparency="true"></iframe>
+                  </span></li>
+            </div>
+              
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+        
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">&#10096; Menu</a>
+                              <!--New div to act as full page -->
+                              <div id = "fullScreen">
+                              <header>
+                                  <div class="wrapper">
+                                           <a href="/" class="logo"> <img src="/gfx/logo.png" alt="logo"> </a>
+                                           <% if user_signed_in? %>
+
+                                              <% else %>
+                                              <%= form_for(:user, :url => session_path(:user)) do |f| %>
+                                              <%= f.text_field :email, placeholder: "Email" %>
+                                              <%= f.password_field :password, placeholder: "Password" %>
+                                              <%= f.submit 'Sign in' %>
+                                              <% end %>
+
+                                           <% end %>
+                                  </div>
+
+                              </header>
+
+                              <div id="content">
+                                  <div class="wrapper">
+                                      <% flash.each do |name, msg| %>
+                                          <%= content_tag :div, msg, :id => "flash_sign", class: "flash #{name}" %>
+                                      <% end %>
+                                      <%= yield %>
+                                  </div>
+                              </div>
+
+                              <script type="text/javascript">
+                                $(document).ready(function(){
+                                  setTimeout(function(){
+                                    $('#flash_sign').remove();
+                                  }, 2500);
+                                })
+                              </script>
+                            </div>
+                            <!-- /#fullscreen -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        
+        
+      </div>
+      <!-- /#wrapper -->
+      
+      <!-- START sidebar code -->
+
+      <!-- Bootstrap Core JavaScript -->
+      <script src="/js/bootstrap.min.js"></script>
+
+      <!-- Menu Toggle Script -->
+      <script>
+      $("#menu-toggle").click(function(e) {
+        toggleMenu++;
+        toggleMenu%=2;
+        if(toggleMenu ==1){
+          document.getElementById("menu-toggle").innerHTML= "&#10097; Menu"
+        }else{
+          document.getElementById("menu-toggle").innerHTML= "&#10096; Menu"
+        }
+          e.preventDefault();
+          $("#wrapper").toggleClass("toggled");
+      });
+      </script>
+      <!-- END sidebar code -->
+      
+    </body>       
+</html>

@@ -1,0 +1,30 @@
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/themes/cupertino/jquery-ui.css" />
+
+<!--This file projects the static images while also allowing to resize and drag the images around -->
+
+<% for i in 0..@n %>
+<div class="drag" style="display:inline-block">
+<a href="http://google.com"><img class="resize" style="border:1px solid black" src="/testing/crawler" /></a>
+</div>
+<% end %>
+
+
+<script>
+zIndex = 30;
+$('.resize').resizable();
+$('.drag').draggable({
+    appendTo: 'body',
+    start: function(event, ui) {
+        isDraggingMedia = true;
+        $(this).css({'z-index':++zIndex});
+    },
+    stop: function(event, ui) {
+        isDraggingMedia = false;
+        // blah
+    }
+},{snap: true},{ snapTolerance: 12 });
+
+</script>
+

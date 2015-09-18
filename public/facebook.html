@@ -1,0 +1,29 @@
+<% if i.url.link.include? "facebook.com" %>
+    <!--dynamic facebook section -->
+    <!--section for the grey box-->
+        <div class="drag" style="width: <%=i.width%>px; height: <%=i.height%>px;background: #F2F2F2; position:relative; border-radius: 2%">
+            <a href=<%= i.url.link %> target="_blank">
+                <img src="/gfx/fblogo.png">
+            </a>
+            <!--the red box notification display-->
+            <div id="notif" style="width:40px; height:40px; background:red; position:absolute; display: none">
+                <p style="text-align: center; vertical-align: middle; line-height: 10px" >
+                    0
+                </p>
+            </div>
+            <!--login/logout area-->
+            <div id="fbInfo">
+                <script src="/fb.js"></script>
+                <!--login button so it can hide/unhide-->
+                <div id="fbLoginButton">
+                    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+                    </fb:login-button>
+                </div>
+
+                <!--text showing the status for the user-->
+                <div id="status" style="position:absolute">
+                </div>
+
+                <button id="logoutBtn" style="display: none"> Logout </button>
+            </div>
+        </div>

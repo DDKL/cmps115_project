@@ -1,0 +1,301 @@
+<!--CONTENT SHOWN TO USER WHEN LOGGED IN-->
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/themes/cupertino/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="/searchBar.css" />
+
+<script>
+    //variables
+    editBox=0 
+    redditBox=false
+    searchClick = 0
+    animTemp = 0
+    //background
+    var string = "<%=@user.bgimage%>";
+    $("#page-content-wrapper").css("background", "transparent url('"+string+"') no-repeat center center fixed", "z-index", "1");
+    $("#page-content-wrapper").css("background-size", "contain");
+    //other ways of background size is: 100% 100% by width/height, cover, or contain
+
+    //The following only visually gets rid of the header in order
+    //to make way for the Sidebar Navigation
+    $( "header" ).remove();
+</script>
+<title>tabdec</title>
+
+<!-- JAVASCRIPT to clear search text when the field is clicked -->
+<script type="text/javascript">
+$(function() {
+    $("#tfq2b").click(function() {
+        if ($("#tfq2b").val() == "Search in Google"){
+            $("#tfq2b").val(""); 
+        }else{
+            $("#tfq2b").val("");
+        }
+    });
+});
+</script>
+
+<!--SEARCH BAR -->
+<div id="tfheader" style="display:none">
+        <input type="text" id="tfq2b" class="tftextinput2" name="q" size="21" maxlength="120" value="Search in Google">
+        <input type="submit" id="search" value="Search" class="tfbutton2">
+    <div class="tfclear"></div>
+</div>
+
+<script>
+    $('#search').click(function(){
+        var searchURL = "https://www.google.com/#q=";
+        var appendSearch = $('#tfq2b').val();
+        window.open(searchURL+appendSearch, '_blank');
+    });
+    $('#tfq2b').keypress(function(e){
+        if(e.which == 13){//Enter key pressed
+            $('#search').click();//Trigger search button click event
+        }
+    });
+</script>
+
+<!--Search Bar test -->
+<script type="text/javascript">
+    console.log(searchClick);
+    var searchCheck = "<%=@user.enableSearchBar%>";
+    if(searchCheck==1){
+        document.getElementById("tfheader").style.display = "block";
+        // document.getElementById("sb-icon-search").style.display = "block";
+    }else{
+        document.getElementById("tfheader").style.display = "none";
+        // document.getElementById("sb-icon-search").style.display = "none";
+    }
+</script>
+
+<!--This file projects the static images while also allowing to resize and drag the images around -->
+<% for i in @user.boxes %>
+    <% if i.url.link.include? "reddit.com" %>
+    <!--dynamic reddit section -->
+        <div class="resize drag" id='dragRedditBox' style="width: <%=i.width%>px; height: <%=i.height%>px; position: absolute; left: <%=i.xCoor%>px; top: <%=i.yCoor%>px; background: #eee; border:1px;border-color:black; border-radius: 2%; overflow: auto">
+            <form class="subRForm" name= <%= i.id %>>
+                <input type="hidden" class="subRField" value="/r/">
+            </form>
+
+            <div id='redditBox'>
+            </div>
+
+            <script>
+                var tempRedditVar = <%= i.id %>; 
+                document.getElementById('redditBox').setAttribute("id", "redditBox"+tempRedditVar);
+                document.getElementById('dragRedditBox').setAttribute("id", "dragRedditBox"+tempRedditVar);
+            </script>
+
+            <script src="/reddit.js"></script>
+            <script> displayReddit("<%=i.subReddit%>", <%= i.id %>); </script>
+            <script type="text/javascript"> redditBox=true </script>
+        </div>
+    <% elsif i.url.link.include? "instagram.com" %>
+    <!--dynamic instagram section -->
+        <div class="resize drag" id='dragIGBox' style="width: <%=i.width%>px; height: <%=i.height%>px; position: absolute; left: <%=i.xCoor%>px; top: <%=i.yCoor%>px; background: #eee; border:1px solid black; border-radius: 2%; overflow: auto">
+          <div class='igBox' id='igBox'>
+             <form id="tagsearch">
+                <p>
+                    <label for="tag">#</label>
+                    <input type="text" id="tag" name="tag" value="kittens" placeholder="kittens" required pattern="[a-zA-Z0-9]+" />
+                    <input type="submit" value="Search" />
+                </p>
+            </form>
+            <div id='loading'><img src='/gfx/igLoader.gif' alt='loading...'></div>
+          </div>
+          <script>
+                var tempIGVar = <%= i.id %>;
+                document.getElementById('igBox').setAttribute("id", "igBox"+tempIGVar);
+                document.getElementById('dragIGBox').setAttribute("id", "dragIGBox"+tempIGVar);
+          </script>
+
+          <div class="instagram-feed"></div>
+          <script src="/instagramFeed.js"></script>
+          <script> displayInstagram(<%= i.id %>); </script>
+        </div>
+    <% else %>
+        <!--static image call -->
+        <div class="drag" id="tempStaticBox" style="display:inline-block; position: absolute; left: <%=i.xCoor%>px; top: <%=i.yCoor%>px; width: <%=i.width%>px; height: <%=i.height%>px">
+          <a href=<%= i.url.link %> target="_blank">
+          <div style="max-width: <%=i.width%>px; max-height: <%=i.height%>px;">
+            <%= image_tag i.url.image, :style => "border:1px solid black; max-width: 100%; max-height: 100%;", :class=>"resize"%>
+          </div>  
+          </a>
+      </div>
+        <!-- create and change the id of the static div that includes boxes.id to keep track of that box's positioning -->
+        <script>
+            var tempBox = <%= i.id %>;
+            document.getElementById("tempStaticBox").setAttribute("id", "staticBox"+tempBox);
+        </script>
+    <% end %>
+<% end %>
+
+<div id="trash" style="display: none; position:fixed; bottom: 50px; right: 0;z-index: 1000"> 
+    <img src="/gfx/trash.png" id="trashImg" > 
+</div>
+
+<div id="dialog" title="Delete Confirmation"> </div>
+
+<script>
+//script to edit the button
+    $('#editBoxButton').click(function(){
+        editBox++;
+        editBox=editBox%2;
+        if(editBox==1){
+            $("html, body").animate({ scrollTop: 0 }, "fast");
+            $(".resize").animate({ scrollTop: 0 }, "slow");
+            $(".resize").animate({ scrollLeft: 0 }, "slow");
+            document.getElementById("editBoxButton").innerHTML="Finish Edit";
+            document.getElementById("trash").style.display = "block";
+
+            if(typeof redditHide === "function"){
+                redditHide();
+            }   
+            zIndex = 30;
+            $('.resize').resizable({
+                start: function(event, ui) {
+
+                },
+                stop: function(event, ui) {
+                    // takes the resized box's id and grab the last string for the boxes.id which will be transfered to the controller and update the database
+                    var stringTemp = event.target.id;
+
+                    //resizing static images need its own check
+                    if(stringTemp.length == 0){
+                        stringTemp = event.target.offsetParent.id;
+                    }
+
+                    var getBoxId = stringTemp.substring(stringTemp.length-3);
+                    //check if there is still a character when grabbing the last 3. Max number of box.id should be 999.(we don't reuse deleted table i.d's)
+                    if (getBoxId.match(/[a-zA-Z]+/g) != null){
+                        //found a character still in the last 3 of the id.
+                        //remove that character and only assign the last digit
+                        getBoxId = getBoxId.substring(getBoxId.length-2);
+                        if (getBoxId.match(/[a-zA-Z]+/g) != null){
+                            //found a character still in the last 2 of the id.
+                            //remove that character and only assign the last digit
+                            getBoxId = getBoxId.substring(getBoxId.length-1);
+                        }
+                    }
+
+                    var json = {"resizedBoxId" : getBoxId, "width" : event.target.offsetWidth, "height" : event.target.offsetHeight};
+
+                    $.ajax({
+                        type: "GET",
+                        url: '/',
+                        data: json,
+                        async: false,
+                        success: function (data){
+                            console.log("ajax in show-resize success");
+                        },
+                        error: function (data){
+                            console.log("ajax in show-resize failed");
+                        }
+                    });
+                }
+            });
+            $('.drag').draggable({
+                appendTo: 'body',
+                start: function(event, ui) {
+                    isDraggingMedia = true;
+                    $(this).css({'z-index':++zIndex});
+                    if(document.getElementById("trash").style.display == "block"){
+                        animTemp = setInterval(function(){trashAnim()}, 100);
+                        function trashAnim(){
+                            var trashOffSet = document.getElementById("trash").getBoundingClientRect();
+                            var targetBottom = event.target.offsetTop + event.target.offsetHeight;
+                            var targetTop = event.target.offsetLeft + event.target.offsetWidth;
+                            if(targetBottom >= trashOffSet.top && targetTop >= trashOffSet.left){
+                                document.getElementById("trashImg").src = "/gfx/trashOpen.png"
+                            }
+                            else{
+                                document.getElementById("trashImg").src = "/gfx/trashAnim.gif"
+                            }
+                        }
+                    }
+                },
+                stop: function(event, ui) {
+                    isDraggingMedia = false;
+                    clearInterval(animTemp);
+
+                    var trashOffSet = document.getElementById("trash").getBoundingClientRect();
+                    var targetBottom = event.target.offsetTop + event.target.offsetHeight;
+                    var targetTop = event.target.offsetLeft + event.target.offsetWidth;
+
+                    // takes the resized box's id and grab the last string for the boxes.id which will be transfered to the controller and update the database
+                    var stringTemp = event.target.id;
+                    var getBoxId = stringTemp.substring(stringTemp.length-3);
+                    //check if there is still a character when grabbing the last 3. Max number of box.id should be 999.(we don't reuse deleted table i.d's)
+                    if (getBoxId.match(/[a-zA-Z]+/g) != null){
+                        //found a character still in the last 3 of the id.
+                        //remove that character and only assign the last digit
+                        getBoxId = getBoxId.substring(getBoxId.length-2);
+                        if (getBoxId.match(/[a-zA-Z]+/g) != null){
+                            //found a character still in the last 2 of the id.
+                            //remove that character and only assign the last digit
+                            getBoxId = getBoxId.substring(getBoxId.length-1);
+                        }
+                    }
+
+                    //choosing between deleting a box or updating its position in database
+                    if(targetBottom >= trashOffSet.top && targetTop >= trashOffSet.left){
+                        $( "#dialog" ).dialog({
+                          resizable: false,
+                          height:140,
+                          buttons: {
+                            "Delete Box": function() {
+                              $( this ).dialog( "close" );
+                                $.ajax({
+                                    type: "GET",
+                                    url: '/',
+                                    data: { "deleteId" : getBoxId },
+                                    async: false,
+                                    success: function (data){
+                                        console.log("ajax in show-delete success");
+                                        document.getElementById(event.target.id).remove();
+                                    },
+                                    error: function (data){
+                                        console.log("ajax in show-delete failed");
+                                    }
+                                });
+                                document.getElementById("trashImg").src = "/gfx/trash.png"
+                            },
+                            Cancel: function() {
+                              $( this ).dialog( "close" );
+                              document.getElementById("trashImg").src = "/gfx/trashAnim.gif"
+                            }
+                          },
+                        });
+                    }
+                    else{
+                        var json = {"draggedBoxId" : getBoxId, "xCoor" : ui.offset.left, "yCoor" : ui.offset.top};
+
+                        $.ajax({
+                            type: "GET",
+                            url: '/',
+                            data: json,
+                            async: false,
+                            success: function (data){
+                                console.log("ajax in show-position success");
+                            },
+                            error: function (data){
+                                console.log("ajax in show-position failed");
+                            }
+                        });
+                    }
+                }
+            },{snap: true},{ snapTolerance: 12 }, 
+            {containment: '#page-content-wrapper'});
+            $('.resize').resizable("enable");
+            $('.drag').draggable("enable");
+        }else{
+            document.getElementById("editBoxButton").innerHTML="Edit Boxes";
+            document.getElementById("trash").style.display = "none";
+            if(typeof redditHide === "function"){
+                redditHide();
+            }    
+            $('.resize').resizable("disable");
+            $('.drag').draggable("disable");
+        }
+    });
+</script>
+<!--END CONTENT SHOWN TO USER WHEN LOGGED IN-->

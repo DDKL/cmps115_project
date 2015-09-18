@@ -1,0 +1,50 @@
+<!--START URLS NEW-->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+
+<!--autocomplete section -->
+<script>
+  $(function() {
+    var availableTags = [
+      "http://www.reddit.com",
+      "http://www.facebook.com",
+      "http://www.instagram.com"
+    ];
+    $( "#urlField" ).autocomplete({
+      //source: availableTags,
+      source: function(request, response) {
+        var results = $.ui.autocomplete.filter(availableTags, request.term);
+        response(results.slice(0,5));
+      }
+    });
+    $(function () {
+      $.ajax({
+        type: "GET",
+        url: 'new.json',
+        dataType: 'json',
+        async: false,
+        success: function(data){
+          $.each(data, function(k) {
+            var urlLink = String(data[k].link);
+            urlLink = urlLink.replace("http://", "http://www.");
+            availableTags.push(urlLink);
+          });
+        },
+        error: function(data){
+          console.log("it done messed up");
+        }
+      });                      
+    });
+  });
+</script>
+
+<h1>Add URL</h1>
+<%= form_for @url do |f| %>
+  <p>
+    <%= f.text_field :link, id: 'urlField', placeholder: "Website URL" %>
+  </p>
+  
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>
+<!--END URLS NEW-->

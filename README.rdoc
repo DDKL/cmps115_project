@@ -1,0 +1,130 @@
+User Document
+Project: Homepage (tabdec)
+Team: Handle.cs
+URL: tabdec.com
+For Linux environment (the production branch):
+I think it is better if you pull from the master branch instead.
+There are some requirements that you need to fulfill before you can get the project to work.
+First install ruby from :
+https://www.ruby-lang.org/en/downloads/
+we use ruby 2.1.2 but the latest one should still work.
+Next you are going to need to get RubyGems packaging system from:
+http://rubygems.org/pages/download
+Lastly the database we are using is postgresql which can be download here:
+http://www.postgresql.org/download/
+Once you install postgresql and you are on ubuntu you are going to need the other admin tools
+so on the terminal type:
+sudo apt-get install libpq-dev phppgadmin pgadmin3
+than you are going to need to create a username called tabdec with the password 1234 so type
+on the terminal:
+sudo su postgres -c psql
+then type:
+create user tabdec with password '1234';
+alter user tabdec superuser;
+this will create a user called tabdec with the password 1234
+Now you are going to need to clone the project repo.
+In your Terminal type:
+git clone https://github.com/haiqvo/HomePage:production
+this will get a clone of the work repo (note the repo is private and only collaborators can clone
+the repo email voqhai@gmail.com if you want access)
+Now to run the rail application you are going to need to be in the project bin folder than in the
+terminal type:
+rake db:create
+rake db:migrate
+which will make and update the dbthan type:
+rails s
+to run the application.
+Linux environment setup (for master branch)
+The only different in this one compared to the production branch is that we are using SQLite3
+instead of Postges so the setup is more simple.
+You still need ruby:
+https://www.ruby-lang.org/en/downloads/
+Next you are going to need to get RubyGems packaging system from:
+http://rubygems.org/pages/download
+Once that is install you are going to need rails
+Now simply clone the repo with git:
+git clone https://github.com/haiqvo/HomePage
+The rest is the same:
+rake db:create
+rake db:migrate
+rails s
+Set up Rails Instruction: The One Stop Setup, No Downloads Required
+I recommend using nitrous.io to set up the Rails environment. Visit nitrous.io at
+https://www.nitrous.io
+Clone project by
+git clone https://github.com/haiqvo/HomePage
+After cloning the project, in the terminal type:
+bundle install
+will install the bundles in the Gemfile
+rake db:migrate
+sets up the database with the database schema.
+rails s
+It starts the Ruby on Rails server. Once the Rails server starts without any error, click on
+preview in the menu and select Port 3000. It directs you to the website set up by the Rails
+server.
+A good alternative to the Nitrous Cloud IDE, if it doesn’t work for you, is the Cloud9 IDE. To
+check it out go to https://www.c9.io. It automatically links everything from your Github project to
+your Cloud9 account by linking your account to Github. The only drawback is that currently,
+CSS formatting does not seem to work on the test rails server. Other than that, it works well.
+How to use:If you can not get the local version to run its ok, you can also just go to http://www.tabdec.com/
+For more information about the site, there’s an About, Contact, and Help section located on the
+bottom footer.
+There you will see a sign up page. Sign up only if you have not signed up yet. You will see your
+profile page. This page is your canvas where you can add boxes, move boxes, and resize
+boxes.
+To add a box, click on the add url button. It will ask you to add a url. Depending if there is a
+dynamic version of the box available you can chose to pick the dynamic version.
+(There are 2 different boxes currently that are dynamic where you can see useful information
+and static boxes which just contain a static image.) As of right now reddit.com and
+instagram.com use dynamic boxes. Both of those dynamic boxes contain a submit text field in
+order to specify what information you want to display from that website.
+Once you add a few boxes you can click on the edit boxes link that will let you move and resize
+your boxes.Then, if you want a colorful background you can go to edit account button to add a
+background to your profile. Make sure it is a legit image url that contains a .jpg, .png, or .gif .
+If there’s a box that you no want/need, if you go to edit boxes, you would notice there is a trash
+can on the bottom right corner that you can drag the box into. There you have the option to
+delete the box.
+In the edit account you can also enable a search bar that will search on Google for you.
+User Stories:
+User
+As a user I want to be able to sign in so I can access my home page.
+As a user I want to edit my login information so that I can change my username or
+password.
+As a user I want to know what the website is about so I would know what I should
+expect from the website.
+As a user I want to know how to use the website so I can use it as my home page.
+As a user I want a website that can act as my homepage so I can access my tabs
+faster.
+As a user I want the largest amount of space to add and customize my boxes so I
+can easily see all my favorite websites.
+As a user I want to customize my websites so It would be “my” home page.
+As a user I want to get rid of my websites so I can get rid of unwanted tabs.
+As a user I want to be able to see useful information in the dynamic boxes so I can
+read Reddit or Instagram feeds.
+As a user I want to view my favorite websites so I can access it with a single click.
+As a user I want to have my own background so it would feel more of my own
+page.
+As a user I want to contact the creators if there’s an issue so I can improve the
+website.
+As a user I want to pay the creators for their hard work so they get paid!!(not
+implemented)
+UI Designer
+As a UI designer I want to make the website as customizable as possible so users
+have more options.
+As a UI designer I want to make it easy to sign up so more users would find it
+friendly.
+As a UI designer I want to be able to make the website simple and easy to use so
+that all users can have a pleasant user experience.
+As a UI designer I need to see if the UI is easy to understand so I can improve it.
+Developer
+As a developer I need to store the user data so I can keep track of what users do
+on the site.
+As a developer I want my users to have an authenticated login session so they
+have better privacy.
+As a developer I want to get static images of websites so that users can see it on
+their homepage.
+As a developer I want to display dynamic boxes for some box
+As a developer I want to introduce a plugin system for dynamic boxes so users
+can customize it better.(not implemented)
+As a developer I need to take feedback to improve the code so users would like it
+more.

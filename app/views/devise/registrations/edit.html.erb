@@ -1,0 +1,139 @@
+<!--START DEVISE REGISTRATIONS EDIT-->
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<link href="http://code.jquery.com/ui/1.11.2/themes/le-frog/jquery-ui.css" rel="stylesheet">
+<script type="text/javascript">
+  var searchCheck = "<%=@user.enableSearchBar%>";
+  if(searchCheck!=1){
+    var searchClick = 0;
+  }else{
+    var searchClick =1;
+  }
+  var hasBg = 0;
+  var bgCheck = "<%=@user.bgimage%>"
+  if(bgCheck!=""){
+    hasBg = 1;
+    console.log("bgCheck = " +"<%=@user.bgimage%> hasBg = "+hasBg );
+  }
+
+  //The following only visually gets rid of the header in order
+    //to make way for the Sidebar Navigation
+    $( "header" ).remove();
+</script>
+<title>tabdec Edit Account</title>
+  <script>
+     $(function() {
+        $( "#accordion-2" ).accordion({
+           collapsible: true
+        });
+     });
+  </script>
+  <style>
+     #accordion-2{font-size: 14px;}
+  </style>
+
+    <div id="accordion-2">
+       <h3>Edit <%= resource_name.to_s.humanize %></h3>
+    <div>
+       <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+        <%= devise_error_messages! %>
+
+        <div class="field">
+          <%= f.label :email %><br />
+          <%= f.email_field :email, autofocus: true %>
+        </div>
+
+        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+          <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+        <% end %>
+
+        <div class="field">
+          <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+          <%= f.password_field :password, autocomplete: "off" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :password_confirmation %><br />
+          <%= f.password_field :password_confirmation, autocomplete: "off" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+          <%= f.password_field :current_password, autocomplete: "off" %>
+        </div>
+
+        <div class="actions">
+          <%= f.submit "Update" %>
+        </div>
+      <% end %>
+    </div>
+    <h3>Change Background Image</h3>
+    <div>
+       <!--This is to change background -->
+      <p><b>Make sure the URL leads to a .png, .jpg, or .gif image, otherwise it won't show</b></p>
+      <p id="windowSize"> Something </p>
+      <script>
+        document.getElementById("windowSize").innerHTML= "recommended image width: '"+$("#page-content-wrapper").width()+ "px', image height '" + ($("#page-content-wrapper").height()) +"px'"</script>
+      <input type="text" id="imgURL">
+      <button type="button" id = "hungry" onclick = "document.getElementById('displayImage').innerHTML= 'Image from ' + $('#imgURL').val();"> Upload </button>
+      <button type="button" id = "removeBackground"> Remove Background</button>
+      <script>
+        //this is the actions taken when you click on the upload button
+        console.log($("#content").height()+" "+$("#content").width()+" APPLESS");
+        $('#hungry').click(function(){
+          var imgURL = $('#imgURL').val();
+          console.log(imgURL);
+          $.ajax({
+              type: "GET",
+              url: '/',
+              data: {"imgURL" : imgURL},
+              async: false,
+              success: function (data){
+                  console.log("BGimage stored");
+              },
+              error: function (data){
+                  console.log("BGimage failed");
+              }
+          });
+          $(location).attr('href','/');
+        });
+
+        //this is the action taken when remove background
+        $('#removeBackground').click(function(){
+          if(hasBg==1){
+              $.ajax({
+                  type: "GET",
+                  url: '/',
+                  data: {"deleteBg" : bgCheck},
+                  async: false,
+                  success: function (data){
+                      console.log("BGimage deleted");
+                  },
+                  error: function (data){
+                      console.log("BGimage failed to delete");
+                  }
+              });
+            $(location).attr('href','/');
+          }else{
+            alert("There's no background image to delete!");
+          }
+        });
+
+      </script>
+      <p id = "displayImage"></p>
+    </div>
+    <h3>Enable Search Bar</h3>
+    <div>
+      <button id="searchBar">display search-bar</button>
+      <!-- uses the script for searchbar -->
+      <script src="/searchBar.js"></script>
+
+      <p id = "displaySearchBar"></p>
+    </div>
+    <h3>Cancel my account</h3>
+    <div>
+       <p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
+    </div>
+    </div>
+
+<%= link_to "Back", :back %>
+<!--END DEVISE REGISTRATIONS EDIT-->

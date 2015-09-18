@@ -1,0 +1,74 @@
+/*This constrains the image to fit the slide show*/
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+/*Container for slide show*/
+#slideshow #slideshowWindow {
+	width:600px;
+	height:380px;
+	margin:0;
+	padding:0;
+	border: 1px;
+	border-style: solid;
+    border-color: #D2D2D2;
+	position:relative;
+	overflow:hidden;
+}
+/*Sliding process*/
+#slideshow #slideshowWindow .slide {
+	margin:0;
+	padding:0;
+	width:600px; 
+	height:380;
+	float:left;
+	position:relative;
+}
+#slideshow #slideshowWindow .slide .slideText {
+	position:absolute;
+	top:300px;
+	left:0px;
+	width:100%;
+	height:130px;
+	background-image:url(/gfx/greyBg.png);
+	background-repeat:repeat;
+	margin:0;
+	padding:0;
+	color:#ffffff;
+	font-family:Myriad Pro, Arial, Helvetica, sans-serif;
+}
+#slideshow #slideshowWindow .slide .slideText a:visited {
+	color:#ffffff;
+	text-decoration:none;
+}
+
+#slideshow #slideshowWindow .slide .slideText h2, 
+#slideshow #slideshowWindow .slide .slideText p {
+	margin:10px 0 0 10px;
+	padding:0;
+}
+
+span {
+	margin: 5px;
+	padding: 5px;
+	display:inline-block;
+	background-color: #D2D2D2;
+	white-space:normal;
+}
+
+.nav {
+	text-indent:-10000px;
+	position:relative;
+	cursor:pointer;
+}
+
+.blueimp-gallery > .description {
+  position: absolute;
+  top: 80px;
+  left: 15px;
+  color: #fff;
+  display: none;
+}
+.blueimp-gallery-controls > .description {
+  display: block;
+}

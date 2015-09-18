@@ -1,0 +1,57 @@
+<!--START REGISTRATIONS NEW-->
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-KTX3DW"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KTX3DW');</script>
+<!-- End Google Tag Manager -->
+<title>tabdec</title>
+<div class="wrapper">
+    <div class="panel right">
+        <h1>Sign up Here!</h1>
+            <!--form_for helper method creates a form and pass @user variable as param -->
+            <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+                <%= devise_error_messages! %>
+                <%= f.email_field :email, placeholder: "Email" %>
+                <%= f.password_field :password, placeholder: "Password" %>
+                <%= f.password_field :password_confirmation, placeholder: "Confirm Password" %>
+                <%= f.submit "Sign up" %>
+            <% end %>
+    </div>
+</div>
+
+<!-- this is the code for slideshow -->
+<link rel="stylesheet" href="/css/blueimp-gallery.min.css">
+<!-- The Gallery as inline carousel, can be positioned anywhere on the page -->
+<div id="blueimp-gallery-carousel" class="blueimp-gallery blueimp-gallery-carousel">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
+
+
+<div id="links">
+    <a href="/gfx/sample4.jpg" title="Disney Sample"></a>
+    <a href="/gfx/sample1.jpg" title="Reddit Sample"></a>
+    <a href="/gfx/sample2.jpg" title="Pokemon Sample"></a>
+    <a href="/gfx/sample3.jpg" title="Madoka Sample"></a>
+</div>
+
+<script src="/js/blueimp-gallery.min.js"></script>
+
+<script>
+blueimp.Gallery(
+    document.getElementById('links').getElementsByTagName('a'),
+    {
+        container: '#blueimp-gallery-carousel',
+        carousel: true
+    }
+);
+</script>
+<!--END REGISTRATIONS NEW-->
